@@ -12,7 +12,7 @@ class Core
     //设置sso的url
     private $sso_url = 'http://test1.aiku.fun/';
     //设置sso的code验证地址
-    private $sso_code_url = 'ttp://test1.aiku.fun/index.php?code=';
+    private $sso_code_url = 'http://test1.aiku.fun/index.php?code=';
     //加密用公钥
     private $public_key = '-----BEGIN PUBLIC KEY-----
 MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC46V0gBZv78t4MFGlRE5kWeN3j
