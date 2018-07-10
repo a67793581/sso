@@ -246,7 +246,7 @@ zmD24uz8gSKXDk0=
         if(!empty($arr)){
             $this->ajax($arr,$info);
         }else{
-            echo 'window.setTimeout("window.location=\''.$_GET['callback'].'\'",0);';
+//            echo 'window.setTimeout("window.location=\''.$_GET['callback'].'\'",0);';
         }
         echo '
                 }
