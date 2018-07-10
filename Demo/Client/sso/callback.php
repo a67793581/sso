@@ -28,7 +28,7 @@ function get_curl_data($url, $param = array())
     // 抓取URL并把它传递给浏览器
     $res = curl_exec($ch);
     // 关闭cURL资源，并且释放系统资源
-    var_dump($res,$ch,$url,curl_error($ch));
+//    var_dump($res,$ch,$url,curl_error($ch));
     curl_close($ch);
     return $res;
 }
