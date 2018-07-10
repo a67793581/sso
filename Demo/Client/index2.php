@@ -19,18 +19,18 @@ echo $_SERVER["QUERY_STRING"]."<br>"; #id=5
 echo $_SERVER['HTTP_REFERER']."<br>";
 
 //获取完整的url
-echo 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
-echo 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'];
+echo '<br>http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+echo '<br>http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'];
 #http://localhost/blog/testurl.php?id=5
 
 //包含端口号的完整url
-echo 'http://'.$_SERVER['SERVER_NAME'].':'.$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"];
-#http://localhost:80/blog/testurl.php?id=5
+echo '<br>http://'.$_SERVER['SERVER_NAME'].':'.$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"];
+
 
 //只取路径
-$url='http://'.$_SERVER['SERVER_NAME'].$_SERVER["REQUEST_URI"];
+$url='<br>http://'.$_SERVER['SERVER_NAME'].$_SERVER["REQUEST_URI"];
 echo dirname($url);
-#http://localhost/blog
+
 
 
 if(isset($_COOKIE['sign'])){
