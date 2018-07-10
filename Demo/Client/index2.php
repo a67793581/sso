@@ -1,7 +1,7 @@
 <?php
 header('Content-Type:text/html; charset=utf-8');
 
-$sso_url = 'http://test1.cc/index.php'; //你SSO所在的域名,不是当前项目地址
+$sso_url = 'http://test1.aiku.fun/index.php'; //你SSO所在的域名,不是当前项目地址
 $url = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 
 
