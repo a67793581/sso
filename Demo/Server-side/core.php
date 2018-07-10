@@ -8,10 +8,7 @@
 
 class Core
 {
-
-    //设置sso的url
-    private $sso_url = '//user.aiku.fun/';
-
+    
     //$api_url 为各个网站接口的地址
     private $api_url = array(
         'http://test2.aiku.fun/sso/callback.php',
