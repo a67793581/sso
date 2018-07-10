@@ -10,12 +10,11 @@ class Core
 {
 
     //设置sso的url
-    private $sso_url = 'https://user.aiku.fun/';
+    private $sso_url = '//user.aiku.fun/';
 
     //$api_url 为各个网站接口的地址
     private $api_url = array(
-        'https://www.aiku.fun/sso/callback.php',
-        'https://blog.aiku.fun/sso/callback.php',
+        'http://test2.aiku.fun/sso/callback.php',
     );
 
     //加密用公钥
@@ -162,6 +161,45 @@ zmD24uz8gSKXDk0=
         $redis->del($key);
         return $info;
     }
+
+
+//    /**
+//     * 生成code并将用户信息存到缓存数据库
+//     */
+//    function code($url='',$info){
+//        $json = json_encode($info);
+//
+//        $code = md5($json.$url);
+//
+//        //实例化mysql
+//        $Mysql = new Mysql();
+//        //连接
+//        $time = get_time();
+//        $Mysql->doSql("INSERT into `code` VALUES(null,'{$code}','{$json}','{$time}')");
+//        return $code;
+//    }
+
+//    /**
+//     * 根据code查找缓存数据库 并返回信息
+//     */
+//    function get_info($code){
+//
+//        //实例化mysql
+//        $Mysql = new Mysql();
+//        //连接
+//        $time1 = time()-10;
+//        $time = date("Y-m-d H:i:s" ,$time1);
+//        $Mysql->_connect();
+//        $info = $Mysql->doSql("SELECT `id`,`json` FROM `code` where code = '{$code}' and time > '{$time}'");
+//        if(empty($info)){
+//            return ;
+//        }else{
+//            $id = $info[0]['id'];
+//            $Mysql->doSql("DELETE FROM `code` where id = '{$id}'");
+//        }
+//
+//        return $info[0]['json'];
+//    }
 
 
     /**
