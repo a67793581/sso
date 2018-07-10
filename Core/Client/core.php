@@ -29,6 +29,8 @@ class Core
     {
         ini_set('error_reporting', -1); //关闭错误提示
         ini_set('display_errors', -1);  //关闭错误提示
+        $this->private_key =  openssl_pkey_get_private($this->private_key);//格式化秘钥
+        $this->public_key = openssl_pkey_get_public($this->public_key);//格式化秘钥
     }
 
     /**
@@ -83,7 +85,7 @@ class Core
      * 加密方法  （可自定义 如果自定义那么公钥私钥也需自行修改）
      */
     function encryption($data){
-        $this->public_key = openssl_pkey_get_public($this->public_key);//格式化秘钥
+
         $data = json_encode($data);
         $encrypted = '';
         openssl_public_encrypt($data, $encrypted, $this->public_key);//公钥加密
@@ -95,7 +97,7 @@ class Core
      * 解密方法  （可自定义 如果自定义那么公钥私钥也需自行修改）
      */
     function decrypted($data){
-        $this->private_key =  openssl_pkey_get_private($this->private_key);//格式化秘钥
+
         $decrypted = '';
         openssl_private_decrypt(base64_decode($data), $decrypted, $this->private_key);//私钥解密
         return json_decode($decrypted, true);
