@@ -10,7 +10,7 @@ class Core
 {
 
     //设置sso的url
-    private $sso_url = 'https://user.aiku.fun/';
+    private $sso_url = 'https://test1.aiku.fun/';
 
     //加密用公钥
     private $public_key = '-----BEGIN PUBLIC KEY-----
