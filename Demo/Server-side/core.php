@@ -15,8 +15,7 @@ class Core
 
     //$api_url 为各个网站接口的地址
     private $api_url = array(
-        'https://www.aiku.fun/sso/callback.php',
-        'https://blog.aiku.fun/sso/callback.php',
+        'https://test2.aiku.fun/sso/callback.php',
     );
 
     //加密用公钥
