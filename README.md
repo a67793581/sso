@@ -22,7 +22,7 @@
         }
         exit($_GET['callback'] . '(0)');//返回登录完成的信息
 ```
-###  至此完成登录
+###  至此完成登录 核心类请务必自己看一下有很多可以自定义
 
 ## 服务端核心类的必要配置信息
 ```
@@ -31,11 +31,12 @@
         'http://test2.aiku.fun/sso/callback.php',
     );
     //以下3个参数 2个核心类要一致
-    //加密用公钥
+    //加密用RSA公钥 秘钥格式PKCS#1
     private $public_key = '';
 
-    //加密用私钥
+    //加密用RSA私钥 秘钥格式PKCS#1
     private  $private_key = '';
+
 
     //code 加密用秘钥
     private $md5_key = '';
@@ -45,12 +46,14 @@
     //设置服务端code获取用户信息的完整url包含变量名不包含变量值
     private $sso_code_url = 'http://test1.aiku.fun/index.php?code=';
     //以下3个参数 2个核心类要一致
-    //加密用公钥 
+    //加密用RSA公钥 秘钥格式PKCS#1
     private $public_key = '';
 
-    //加密用私钥
+    //加密用RSA私钥 秘钥格式PKCS#1
     private  $private_key = '';
+
 
     //code 加密用秘钥
     private $md5_key = '';
 ```
+
