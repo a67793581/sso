@@ -43,7 +43,6 @@ if(empty($_GET)){
         case 'login':
             $key = md5($_GET['code'].$core->md5_key);
             $url = $core->__get('sso_url')."index.php?code={$key}";
-            var_dump($url);
             $info = get_curl_data($url);
             empty($info) && exit($_GET['callback'] . '(2)');
             $user = $core->get_user($info);
