@@ -5,8 +5,7 @@
  * Date: 2018/7/4
  * Time: 19:20
  */
-require_once 'mysql.php';
-require_once 'common_helper.php';
+
 class Core
 {
 
@@ -111,7 +110,7 @@ zmD24uz8gSKXDk0=
             return $list;
         }else{
             if(empty($_COOKIE[$key])){
-                return;
+                return array();
             }else{
                 return $this->decrypted($_COOKIE[$key]);
             }

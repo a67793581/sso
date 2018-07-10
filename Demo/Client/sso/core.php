@@ -9,8 +9,6 @@
 class Core
 {
 
-    //设置sso的url
-    private $sso_url = 'http://test1.aiku.fun/';
     //设置sso的code验证地址
     private $sso_code_url = 'http://test1.aiku.fun/index.php?code=';
     //加密用公钥
@@ -105,7 +103,7 @@ zmD24uz8gSKXDk0=
             return $list;
         }else{
             if(empty($_COOKIE[$key])){
-                return;
+                return array();
             }else{
                 return $this->decrypted($_COOKIE[$key]);
             }
@@ -137,12 +135,45 @@ zmD24uz8gSKXDk0=
     }
 
     /**
+     * 请求远程数据
+     * @param type $url
+     * @param type $parm
+     * @return type
+     */
+    function get_curl_data($url, $param = array())
+    {
+        // 创建一个cURL资源
+        $ch = curl_init();
+
+        // 设置URL和相应的选项
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);//绕过ssl验证
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 1);
+
+        if (!empty($param)) {
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($param));
+        }
+        // 抓取URL并把它传递给浏览器
+        $res = curl_exec($ch);
+        // 关闭cURL资源，并且释放系统资源
+//    var_dump($res,$ch,$url,curl_error($ch));
+        curl_close($ch);
+        return $res;
+    }
+
+
+    /**
      * 将获取到的用户信息解密
      */
     function login($code,$callback){
         $key = md5($code.$this->md5_key);
         $url = $this->sso_code_url.$key;
-        $info = get_curl_data($url);
+        $info = $this->get_curl_data($url);
         empty($info) && exit($callback . '(2)');
         $user = $this->get_user($info);
         empty($user) && exit($callback . '(3)');
