@@ -41,16 +41,10 @@ if(empty($_GET)){
     $core = new Core();
     switch ($_GET['type']){
         case 'login':
-            $key = md5($_GET['code'].$core->md5_key);
-            $url = $core->__get('sso_url')."index.php?code={$key}";
-            $info = get_curl_data($url);
-            empty($info) && exit($_GET['callback'] . '(2)');
-            $user = $core->get_user($info);
-            empty($user) && exit($_GET['callback'] . '(3)');
+            $user = $core->login($_GET['code'],$_GET['callback']);
             foreach($user as $key=>$val){
                 setcookie($key,$val,0,'/');
             }
-
             exit($_GET['callback'] . '(0)');
             break;
         case 'logout':
