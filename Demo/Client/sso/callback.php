@@ -16,7 +16,7 @@ if(empty($_GET)){
             break;
         case 'logout':
             var_dump($_GET);
-            if(!empty($_GET['time']) && !empty($_GET['sign'])){
+            if(isset($_GET['time']) && isset($_GET['sign']) ){
                 $params = array('time'=>$_GET['time'],'type'=>'logout');
                 $res = $core->logout($_GET['sign'],$params);
                 if($res){
