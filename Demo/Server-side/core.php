@@ -217,9 +217,18 @@ zmD24uz8gSKXDk0=
      */
     function login($info){
 
-        echo '<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script><script type="text/javascript">$(document).ready(function(){';
-        $this->ajax($this->api_url,$info);
-        echo '    });</script>';
+        //通知全部网站接口登出
+        foreach ($this->api_url as $url){
+            $code = $this->code($url,$info);
+            $time = time();
+            $params = array('time'=>$time,'type'=>'login','code'=>$code);
+            $sign = $this->sign($params);
+            $params['sign'] = $sign;
+            $url = $url.'?'.http_build_query($params);
+            echo '<script src="'.$url.'" type="text/javascript"></script>';
+        }
+        //跳转到发起退出登录的网站
+        echo 'window.setTimeout("window.location=\''.$_GET['callback'].'\'",0);';
     }
 
     /**
