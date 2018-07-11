@@ -20,7 +20,7 @@ if(empty($_GET)){
                     exit('function (0){}');
                 }
             }else{
-                exit('function (4){}');
+                exit('function ("非法请求"){}');
             }
             break;
         case 'logout':
