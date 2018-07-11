@@ -19,6 +19,8 @@ if(empty($_GET)){
             $res = $core->logout($_GET['code'],$params);
             if($res){
                 setcookie('sign','',0,'/');
+            }else{
+                echo '校验失败';
             }
             break;
     }
