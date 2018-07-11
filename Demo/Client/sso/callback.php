@@ -16,7 +16,7 @@ if(empty($_GET)){
             break;
         case 'logout':
             $params = array('time'=>$_GET['time'],'type'=>'logout');
-            $res = $core->logout($_GET['code'],$params);
+            $res = $core->logout($_GET['sign'],$params);
             if($res){
                 setcookie('sign','',0,'/');
             }else{
