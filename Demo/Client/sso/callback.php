@@ -16,17 +16,15 @@ if(empty($_GET)){
             break;
         case 'logout':
             var_dump($_GET);
-            if(isset($_GET['time']) && isset($_GET['sign']) ){
-                $params = array('time'=>$_GET['time'],'type'=>'logout');
-                $res = $core->logout($_GET['sign'],$params);
-                if($res){
-                    setcookie('sign','',0,'/');
-                }else{
-                    echo '校验失败';
-                }
+
+            $params = array('time'=>$_GET['time'],'type'=>'logout');
+            $res = $core->logout($_GET['sign'],$params);
+            if($res){
+                setcookie('sign','',0,'/');
             }else{
-                echo '非法请求';
+                echo '校验失败';
             }
+
             break;
     }
 
