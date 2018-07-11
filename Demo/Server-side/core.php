@@ -228,7 +228,7 @@ zmD24uz8gSKXDk0=
             echo '<script src="'.$url.'" type="text/javascript"></script>';
         }
         //跳转到发起退出登录的网站
-        echo '<script>window.setTimeout("window.location=\''.$_GET['callback'].'\'",0);</script>';
+        echo '<script type="text/javascript">window.onload=function(){window.location.href = "'.$_GET['callback'].'";}</script>';
     }
 
     /**
