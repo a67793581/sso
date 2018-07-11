@@ -23,8 +23,9 @@ if(empty($_GET)){
                 }else{
                     echo '校验失败';
                 }
+            }else{
+                echo '非法请求';
             }
-            echo '非法请求';
             break;
     }
 
