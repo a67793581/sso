@@ -15,13 +15,16 @@ if(empty($_GET)){
             exit($_GET['callback'] . '(0)');
             break;
         case 'logout':
-            $params = array('time'=>$_GET['time'],'type'=>'logout');
-            $res = $core->logout($_GET['sign'],$params);
-            if($res){
-                setcookie('sign','',0,'/');
-            }else{
-                echo '校验失败';
+            if(!empty($_GET['time']) && !empty($_GET['sign'])){
+                $params = array('time'=>$_GET['time'],'type'=>'logout');
+                $res = $core->logout($_GET['sign'],$params);
+                if($res){
+                    setcookie('sign','',0,'/');
+                }else{
+                    echo '校验失败';
+                }
             }
+            echo '非法请求';
             break;
     }
 
