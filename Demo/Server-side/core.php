@@ -260,7 +260,7 @@ zmD24uz8gSKXDk0=
             $time = time();
             $params = array('time'=>$time,'type'=>'logout');
             $sign = $this->sign($params);
-            $params['sgin'] = $sign;
+            $params['sign'] = $sign;
             $js_url = $url.'?'.http_build_query($params);
             echo '<script src="'.$js_url.'" type="text/javascript"></script>';
         }
