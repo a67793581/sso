@@ -264,7 +264,6 @@ zmD24uz8gSKXDk0=
             $js_url = $url.'?'.http_build_query($params);
             echo '<script src="'.$js_url.'" type="text/javascript"></script>';
         }
-        exit;
         //跳转到发起退出登录的网站
         echo '<script type="text/javascript">window.onload=function(){window.location.href = document.referrer;}</script>';
     }
