@@ -250,17 +250,40 @@ zmD24uz8gSKXDk0=
         ';
         return;
     }
+
     /**
      * 退出通知
      */
     function logout(){
         //通知全部网站接口登出
         foreach ($this->api_url as $url){
-            $js_url = $url."?type=logout";
+            $time = time();
+            $params = array('time'=>$time,'type'=>'logout');
+            $sign = $this->sign($params);
+            $params['sgin'] = $sign;
+            $js_url = $url.http_build_query($params);
             echo '<script src="'.$js_url.'" type="text/javascript"></script>';
         }
+        exit;
         //跳转到发起退出登录的网站
-        echo '<script type="text/javascript">window.onload=function(){window.location.href = document.referrer;}</script>';
+//        echo '<script type="text/javascript">window.onload=function(){window.location.href = document.referrer;}</script>';
+    }
+
+    /**
+     * 加密sign
+     * @param $params
+     * @return string
+     */
+    function sign($params)
+    {
+        ksort($params);
+        $sign = '';
+        foreach ($params as $key => $val) {
+            $sign .= $key . $val;
+        }
+        $sign .= 'keysecret' . $this->md5_key;
+        $sign = md5($sign);
+        return $sign;
     }
 
 

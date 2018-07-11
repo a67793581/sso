@@ -15,7 +15,11 @@ if(empty($_GET)){
             exit($_GET['callback'] . '(0)');
             break;
         case 'logout':
-            setcookie('sign','',0,'/');
+            $params = array('time'=>$_GET['time'],'type'=>'logout');
+            $res = $core->logout($_GET['code'],$params);
+            if($res){
+                setcookie('sign','',0,'/');
+            }
             break;
     }
 
