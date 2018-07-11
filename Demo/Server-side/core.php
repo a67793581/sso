@@ -51,11 +51,10 @@ zmD24uz8gSKXDk0=
      */
     public function __construct()
     {
-        ini_set('error_reporting', -1);
-        ini_set('display_errors', -1);
-        //初始化秘钥
-        $this->private_key =  openssl_pkey_get_private($this->private_key);//
-        $this->public_key = openssl_pkey_get_public($this->public_key);
+        ini_set('error_reporting', -1); //关闭错误提示
+        ini_set('display_errors', -1);  //关闭错误提示
+        $this->public_key = openssl_pkey_get_public($this->public_key);//格式化秘钥
+        $this->private_key =  openssl_pkey_get_private($this->private_key);//格式化秘钥
     }
 
     /**
@@ -73,9 +72,10 @@ zmD24uz8gSKXDk0=
     }
 
     /**
-     * 加密方法
+     * 加密方法  （可自定义 如果自定义那么公钥私钥也需自行修改）
      */
     function encryption($data){
+
         $data = json_encode($data);
         $encrypted = '';
         openssl_public_encrypt($data, $encrypted, $this->public_key);//公钥加密
@@ -84,20 +84,21 @@ zmD24uz8gSKXDk0=
     }
 
     /**
-     * 解密方法
+     * 解密方法  （可自定义 如果自定义那么公钥私钥也需自行修改）
      */
     function decrypted($data){
+
         $decrypted = '';
         openssl_private_decrypt(base64_decode($data), $decrypted, $this->private_key);//私钥解密
         return json_decode($decrypted, true);
     }
 
     /**
-     * get_cookie 获取cookie并解密
+     * get_cookie 获取cookie并解密  （可自定义）
      */
     function get_cookie($key=''){
         if(empty($key)){
-            $list = [];
+            $list = array();
             foreach($_COOKIE as $k=>$v){
                 if(empty($v)){
                     continue;
@@ -116,7 +117,7 @@ zmD24uz8gSKXDk0=
 
     /**
      * $array
-     * set_cookie 设置cookie并解密
+     * set_cookie 设置cookie并解密  （可自定义）
      */
     function set_cookie($info){
         $arr = array();
@@ -130,7 +131,7 @@ zmD24uz8gSKXDk0=
 
 
     /**
-     * 生成code并将用户信息存到缓存数据库
+     * 生成code并将用户信息存到缓存数据库  （可自定义）
      */
     function code($url='',$info){
         $json = json_encode($info);
@@ -146,7 +147,7 @@ zmD24uz8gSKXDk0=
     }
 
     /**
-     * 根据code查找缓存数据库 并返回信息
+     * 根据code查找缓存数据库 并返回信息  （可自定义）
      */
     function get_info($key){
 
@@ -200,7 +201,7 @@ zmD24uz8gSKXDk0=
 
 
     /**
-     * 将获取到的用户信息解密
+     * 将获取到的用户信息解密  （可自定义）
      */
     function get_user($info){
         $info = json_decode($info);
@@ -212,7 +213,7 @@ zmD24uz8gSKXDk0=
     }
 
     /**
-     * 登陆通知
+     * 登陆通知  （可自定义）
      */
     function login($info){
 
@@ -220,6 +221,10 @@ zmD24uz8gSKXDk0=
         $this->ajax($this->api_url,$info);
         echo '    });</script>';
     }
+
+    /**
+     * 递归发起ajax  （可自定义）
+     */
 
     function ajax($arr,$info){
         if(empty($arr)) {
@@ -257,7 +262,7 @@ zmD24uz8gSKXDk0=
     }
 
     /**
-     * 退出通知
+     * 退出通知  （可自定义）
      */
     function logout(){
         //通知全部网站接口登出
@@ -289,6 +294,4 @@ zmD24uz8gSKXDk0=
         $sign = md5($sign);
         return $sign;
     }
-
-
 }

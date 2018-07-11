@@ -99,10 +99,13 @@ class Core
      * set_cookie 设置cookie并解密  （可自定义）
      */
     function set_cookie($info){
+        $arr = array();
         foreach($info as $key=>$val){
-            $val = $this->encryption($val);
+
+            $arr[$key] = $val = $this->encryption($val);
             setcookie($key,$val,0,'/');
         }
+        return $arr;
     }
 
 
@@ -168,7 +171,12 @@ class Core
             return;
         }
         $code = $this->code($arr[0],$info);
-        $url = $arr[0]."?code={$code}&type=login";
+        $time = time();
+        $params = array('time'=>$time,'type'=>'login','code'=>$code);
+        $sign = $this->sign($params);
+        $params['sign'] = $sign;
+        $url = $arr[0].'?'.http_build_query($params);
+
         array_shift($arr);
 
         echo '        

@@ -47,11 +47,10 @@ zmD24uz8gSKXDk0=
      */
     public function __construct()
     {
-        ini_set('error_reporting', -1);
-        ini_set('display_errors', -1);
-        //初始化秘钥
-        $this->private_key =  openssl_pkey_get_private($this->private_key);//
-        $this->public_key = openssl_pkey_get_public($this->public_key);
+        ini_set('error_reporting', -1); //关闭错误提示
+        ini_set('display_errors', -1);  //关闭错误提示
+        $this->private_key =  openssl_pkey_get_private($this->private_key);//格式化秘钥
+        $this->public_key = openssl_pkey_get_public($this->public_key);//格式化秘钥
     }
 
     /**
@@ -66,72 +65,6 @@ zmD24uz8gSKXDk0=
      */
     function __set($property_name, $value) {
         $this->$property_name = $value;
-    }
-
-    /**
-     * 加密方法
-     */
-    function encryption($data){
-        $data = json_encode($data);
-        $encrypted = '';
-        openssl_public_encrypt($data, $encrypted, $this->public_key);//公钥加密
-        $encrypted = base64_encode($encrypted);// base64传输
-        return $encrypted;
-    }
-
-    /**
-     * 解密方法
-     */
-    function decrypted($data){
-        $decrypted = '';
-        openssl_private_decrypt(base64_decode($data), $decrypted, $this->private_key);//私钥解密
-        return json_decode($decrypted, true);
-    }
-
-    /**
-     * get_cookie 获取cookie并解密
-     */
-    function get_cookie($key=''){
-        if(empty($key)){
-            $list = array();
-            foreach($_COOKIE as $k=>$v){
-                if(empty($v)){
-                    continue;
-                }
-                $list[$k]= $this->decrypted($v);
-            }
-            return $list;
-        }else{
-            if(empty($_COOKIE[$key])){
-                return array();
-            }else{
-                return $this->decrypted($_COOKIE[$key]);
-            }
-        }
-    }
-
-    /**
-     * $array
-     * set_cookie 设置cookie并解密
-     */
-    function set_cookie($info){
-        foreach($info as $key=>$val){
-            $val = $this->encryption($val);
-            setcookie($key,$val,0,'/');
-        }
-    }
-
-
-    /**
-     * 将获取到的用户信息解密
-     */
-    function get_user($info){
-        $info = json_decode($info);
-        $res = array();
-        foreach ($info as $k => $v){
-            $res[$k] = $this->decrypted($v);
-        }
-        return $res;
     }
 
     /**
@@ -167,8 +100,77 @@ zmD24uz8gSKXDk0=
     }
 
 
+
     /**
-     * 将获取到的用户信息解密
+     * 加密方法  （可自定义 如果自定义那么公钥私钥也需自行修改）
+     */
+    function encryption($data){
+
+        $data = json_encode($data);
+        $encrypted = '';
+        openssl_public_encrypt($data, $encrypted, $this->public_key);//公钥加密
+        $encrypted = base64_encode($encrypted);// base64传输
+        return $encrypted;
+    }
+
+    /**
+     * 解密方法  （可自定义 如果自定义那么公钥私钥也需自行修改）
+     */
+    function decrypted($data){
+
+        $decrypted = '';
+        openssl_private_decrypt(base64_decode($data), $decrypted, $this->private_key);//私钥解密
+        return json_decode($decrypted, true);
+    }
+
+    /**
+     * get_cookie 获取cookie并解密  （可自定义）
+     */
+    function get_cookie($key=''){
+        if(empty($key)){
+            $list = array();
+            foreach($_COOKIE as $k=>$v){
+                if(empty($v)){
+                    continue;
+                }
+                $list[$k]= $this->decrypted($v);
+            }
+            return $list;
+        }else{
+            if(empty($_COOKIE[$key])){
+                return array();
+            }else{
+                return $this->decrypted($_COOKIE[$key]);
+            }
+        }
+    }
+
+    /**
+     * $array
+     * set_cookie 设置cookie并解密  （可自定义）
+     */
+    function set_cookie($info){
+        foreach($info as $key=>$val){
+            $val = $this->encryption($val);
+            setcookie($key,$val,0,'/');
+        }
+    }
+
+
+    /**
+     * 将获取到的用户信息解密  （可自定义）
+     */
+    function get_user($info){
+        $info = json_decode($info);
+        $res = array();
+        foreach ($info as $k => $v){
+            $res[$k] = $this->decrypted($v);
+        }
+        return $res;
+    }
+
+    /**
+     * 获取登录请求并请求获取用户信息  （可自定义）
      */
     function login($code,$params,$sign1){
         $sign = $this->sign($params);
@@ -190,7 +192,7 @@ zmD24uz8gSKXDk0=
     }
 
     /**
-     * 退出校验
+     * 退出校验  （可自定义）
      */
     function logout($code,$params){
 
