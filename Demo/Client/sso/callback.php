@@ -8,14 +8,23 @@ if(empty($_GET)){
     $core = new Core();
     switch ($_GET['type']){
         case 'login':
-            $user = $core->login($_GET['code'],$_GET['callback']);
-            foreach($user as $key=>$val){
-                setcookie($key,$val,0,'/');
+            if(!empty($_GET['time']) && !empty($_GET['sign']) && !empty($_GET['code'])){
+                $params = array('time'=>$time,'type'=>'login','code'=>$_GET['code']);
+                $user = $core->login($_GET['code'],$params,$_GET['sign']);
+                if(is_int($user)){
+                    exit($_GET['callback'] . "($user)");
+                }else{
+                    foreach($user as $key=>$val){
+                        setcookie($key,$val,0,'/');
+                    }
+                    exit($_GET['callback'] . '(0)');
+                }
+            }else{
+                exit($_GET['callback'] . '(4)');
             }
-            exit($_GET['callback'] . '(0)');
             break;
         case 'logout':
-            if(isset($_GET['time']) && isset($_GET['sign']) ){
+            if(!empty($_GET['time']) && !empty($_GET['sign']) ){
                 $params = array('time'=>$_GET['time'],'type'=>'logout');
                 $res = $core->logout($_GET['sign'],$params);
                 if($res){

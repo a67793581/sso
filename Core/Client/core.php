@@ -161,4 +161,33 @@ class Core
         empty($user) && exit($callback . '(3)');
         return $user;
     }
+
+    /**
+     * 退出校验  （可自定义）
+     */
+    function logout($code,$params){
+
+        $sign = $this->sign($params);
+        if($code == $sign){
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 加密sign
+     * @param $params
+     * @return string
+     */
+    function sign($params)
+    {
+        ksort($params);
+        $sign = '';
+        foreach ($params as $key => $val) {
+            $sign .= $key . $val;
+        }
+        $sign .= 'keysecret' . $this->md5_key;
+        $sign = md5($sign);
+        return $sign;
+    }
 }

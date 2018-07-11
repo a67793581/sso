@@ -170,18 +170,27 @@ zmD24uz8gSKXDk0=
     /**
      * 将获取到的用户信息解密
      */
-    function login($code,$callback){
+    function login($code,$params,$sign1){
+        $sign = $this->sign($params);
+        if($sign1 != $sign){
+            return 1;
+        }
         $key = md5($code.$this->md5_key);
         $url = $this->sso_code_url.$key;
         $info = $this->get_curl_data($url);
-        empty($info) && exit($callback . '(2)');
+
+        if(empty($info)){
+            return 2;
+        }
         $user = $this->get_user($info);
-        empty($user) && exit($callback . '(3)');
+        if(empty($user)){
+            return 3;
+        }
         return $user;
     }
 
     /**
-     * 将获取到的用户信息解密
+     * 退出校验
      */
     function logout($code,$params){
 

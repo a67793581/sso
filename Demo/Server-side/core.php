@@ -226,7 +226,12 @@ zmD24uz8gSKXDk0=
             return;
         }
         $code = $this->code($arr[0],$info);
-        $url = $arr[0]."?code={$code}&type=login";
+        $time = time();
+        $params = array('time'=>$time,'type'=>'login','code'=>$code);
+        $sign = $this->sign($params);
+        $params['sign'] = $sign;
+        $url = $arr[0].'?'.http_build_query($params);
+
         array_shift($arr);
 
         echo '        
