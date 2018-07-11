@@ -266,7 +266,7 @@ zmD24uz8gSKXDk0=
         }
         exit;
         //跳转到发起退出登录的网站
-//        echo '<script type="text/javascript">window.onload=function(){window.location.href = document.referrer;}</script>';
+        echo '<script type="text/javascript">window.onload=function(){window.location.href = document.referrer;}</script>';
     }
 
     /**
