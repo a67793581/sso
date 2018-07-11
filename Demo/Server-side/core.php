@@ -231,44 +231,6 @@ zmD24uz8gSKXDk0=
         echo '<script type="text/javascript">window.onload=function(){window.location.href = "'.$_GET['callback'].'";}</script>';
     }
 
-    /**
-     * 递归发起ajax  （可自定义）
-     */
-
-    function ajax($arr,$info){
-        if(empty($arr)) {
-            return;
-        }
-        $code = $this->code($arr[0],$info);
-        $time = time();
-        $params = array('time'=>$time,'type'=>'login','code'=>$code);
-        $sign = $this->sign($params);
-        $params['sign'] = $sign;
-        $url = $arr[0].'?'.http_build_query($params);
-
-        array_shift($arr);
-
-        echo '        
-            $.ajax({
-                url: "'.$url.'", //url
-                type: "get", //方法
-                dataType: "jsonp", //数据格式为 jsonp 支持跨域提交
-                jsonpCallback : "callback",
-                async:false,
-                success: function(data){ //读取返回结果
-                    ';
-
-        if(!empty($arr)){
-            $this->ajax($arr,$info);
-        }else{
-            echo 'window.setTimeout("window.location=\''.$_GET['callback'].'\'",0);';
-        }
-        echo '
-                }
-            });
-        ';
-        return;
-    }
 
     /**
      * 退出通知  （可自定义）
