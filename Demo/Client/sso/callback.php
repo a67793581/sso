@@ -9,7 +9,7 @@ if(empty($_GET)){
     switch ($_GET['type']){
         case 'login':
             if(!empty($_GET['time']) && !empty($_GET['sign']) && !empty($_GET['code'])){
-                $params = array('time'=>$time,'type'=>'login','code'=>$_GET['code']);
+                $params = array('time'=>$_GET['time'],'type'=>'login','code'=>$_GET['code']);
                 $user = $core->login($_GET['code'],$params,$_GET['sign']);
                 if(is_int($user)){
                     exit($_GET['callback'] . "($user)");
