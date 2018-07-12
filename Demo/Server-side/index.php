@@ -16,7 +16,8 @@ else if(isset($_POST['username']) && isset($_POST['password']) && isset($_GET['c
     //自定义校验
     if(true){
         //保存用户信息到cookie
-        $info = $core->set_cookie(array('sign'=>$_POST['username']));
+        $core->set_cookie(array('sign'=>$_POST['username']));
+        $info = $core->for_encryption(array('sign'=>$_POST['username']));
         $core->login($info);
     }
 }

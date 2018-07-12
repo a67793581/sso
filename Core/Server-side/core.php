@@ -99,15 +99,27 @@ class Core
      * set_cookie 设置cookie并解密  （可自定义）
      */
     function set_cookie($info){
+        if(empty($info)){
+            return false;
+        }
+        foreach($info as $key=>$val){
+            setcookie($key,$val,0,'/');
+        }
+        return true;
+    }
+
+
+    /**
+     * $array
+     * for_encryption 循环加密返回数组 （可自定义）
+     */
+    function for_encryption($info){
         $arr = array();
         foreach($info as $key=>$val){
-
             $arr[$key] = $val = $this->encryption($val);
-            setcookie($key,$val,0,'/');
         }
         return $arr;
     }
-
 
     /**
      * 生成code并将用户信息存到缓存数据库  （可自定义）
