@@ -5,7 +5,7 @@
  * Date: 2018/7/4
  * Time: 19:20
  */
-namespace C\Client_core;
+namespace php_sso\Client_core;
 class Client_core
 {
 

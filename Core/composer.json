@@ -15,8 +15,8 @@
     },
     "autoload": {
         "psr-4": {
-            "C\\Client_core\\": "Core/C/Client_core",
-            "S\\Server_core\\": "Core/S/Server_core"
+            "php_sso\\": "/Client_core",
+            "php_sso\\": "/Server_core"
         }
     }
 }
