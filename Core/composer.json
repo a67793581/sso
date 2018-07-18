@@ -1,0 +1,14 @@
+{
+    "name": "aiku/php_sso",
+    "description": "This is a single sign on class written in PHP",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "kaluo",
+            "email": "284474102@qq.com"
+        }
+    ],
+    "minimum-stability": "beta",
+    "require": {}
+}
