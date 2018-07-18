@@ -16,10 +16,10 @@
     ],
     "minimum-stability": "stable",
     "require": {
-        "php": ">=5.3"
+        "php": ">=5.3.7"
     },
     "require-dev": {
-        "php": ">=5.3"
+        "php": ">=5.3.7"
     },
     "autoload": {
         "psr-4": {
