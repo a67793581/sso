@@ -151,42 +151,100 @@ zmD24uz8gSKXDk0=
         return $res;
     }
 
-    /**
-     * 登陆通知  （可自定义）
-     */
-    function login($info){
+//    /**
+//     * 登陆通知  （可自定义）
+//     */
+//    function login($info){
+//
+//        //通知全部网站接口登出
+//        foreach ($this->api_url as $url){
+//            $code = $this->code($url,$info);
+//            $time = time();
+//            $params = array('time'=>$time,'type'=>'login','code'=>$code);
+//            $sign = $this->sign($params);
+//            $params['sign'] = $sign;
+//            $url = $url.'?'.http_build_query($params);
+//            echo '<script src="'.$url.'" type="text/javascript"></script>';
+//        }
+//        //跳转到发起退出登录的网站
+//        echo '<script type="text/javascript">window.onload=function(){window.location.href = "'.$_GET['callback'].'";}</script>';
+//    }
 
-        //通知全部网站接口登出
-        foreach ($this->api_url as $url){
-            $code = $this->code($url,$info);
-            $time = time();
-            $params = array('time'=>$time,'type'=>'login','code'=>$code);
-            $sign = $this->sign($params);
-            $params['sign'] = $sign;
-            $url = $url.'?'.http_build_query($params);
-            echo '<script src="'.$url.'" type="text/javascript"></script>';
-        }
-        //跳转到发起退出登录的网站
-        echo '<script type="text/javascript">window.onload=function(){window.location.href = "'.$_GET['callback'].'";}</script>';
-    }
-
+//    function  logout(){
+//        //通知全部网站接口登出
+//        foreach ($this->api_url as $url){
+//            $time = time();
+//            $params = array('time'=>$time,'type'=>'logout');
+//            $sign = $this->sign($params);
+//            $params['sign'] = $sign;
+//            $js_url = $url.'?'.http_build_query($params);
+//            echo '<script src="'.$js_url.'" type="text/javascript"></script>';
+//        }
+//        //跳转到发起退出登录的网站
+//        echo '<script type="text/javascript">window.onload=function(){window.location.href = document.referrer;}</script>';
+//    }
 
     /**
      * 退出通知  （可自定义）
      */
     function logout(){
-        //通知全部网站接口登出
-        foreach ($this->api_url as $url){
-            $time = time();
-            $params = array('time'=>$time,'type'=>'logout');
-            $sign = $this->sign($params);
-            $params['sign'] = $sign;
-            $js_url = $url.'?'.http_build_query($params);
-            echo '<script src="'.$js_url.'" type="text/javascript"></script>';
-        }
-        //跳转到发起退出登录的网站
-        echo '<script type="text/javascript">window.onload=function(){window.location.href = document.referrer;}</script>';
+        echo '<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script><script type="text/javascript">$(document).ready(function(){';
+        $this->ajax($this->api_url,'login',$_GET['callback'],'');
+        echo '    });</script>';
     }
+
+    /**
+     * 登陆通知  （可自定义）
+     */
+    function login($info){
+
+        echo '<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script><script type="text/javascript">$(document).ready(function(){';
+        $this->ajax($this->api_url,'login',$_GET['callback'],$info);
+        echo '    });</script>';
+    }
+
+    /**
+     * 递归发起ajax  （可自定义）
+     */
+    function ajax($arr,$type='',$callback,$info=''){
+        if(empty($arr)) {
+            return;
+        }
+
+        $params = array();
+        $params['time'] = time();
+        $params['type'] = $type;
+
+        if(!empty($info)){
+            $params['code'] = $this->code($arr[0],$info);
+        }
+        $params['sign'] = $this->sign($params);
+        $url = $arr[0].'?'.http_build_query($params);
+
+        array_shift($arr);
+
+        echo '        
+            $.ajax({
+                url: "'.$url.'", //url
+                type: "get", //方法
+                dataType: "jsonp", //数据格式为 jsonp 支持跨域提交
+                jsonpCallback : "callback",
+                async:false,
+                success: function(data){ //读取返回结果
+                    ';
+
+        if(!empty($arr)){
+            $this->ajax($arr,$type,$callback,$info);
+        }else{
+            echo 'window.setTimeout("window.location=\''.$callback.'\'",0);';
+        }
+        echo '
+                }
+            });
+        ';
+        return;
+    }
+
 
     /**
      * 加密sign
