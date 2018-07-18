@@ -4,8 +4,8 @@ header('Content-Type:text/html; charset=utf-8');
 if(empty($_GET)){
     exit('测试接口url是否正确');
 }else{
-    require_once 'core.php';
-    $core = new Core();
+    require_once 'Client_core.php';
+    $core = new Client_core();
     switch ($_GET['type']){
         case 'login':
             if(!empty($_GET['time']) && !empty($_GET['sign']) && !empty($_GET['code'])){

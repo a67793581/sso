@@ -6,11 +6,14 @@
  * Time: 19:20
  */
 
-class Core
+class Server_core
 {
+    
+    //$api_url 为各个网站接口的地址
+    private $api_url = array(
+        'http://test2.aiku.fun/sso/callback.php',
+    );
 
-    //设置sso的code验证地址
-    private $sso_code_url = 'http://test1.aiku.fun/index.php?code=';
     //加密用公钥
     private $public_key = '-----BEGIN PUBLIC KEY-----
 MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC46V0gBZv78t4MFGlRE5kWeN3j
@@ -38,6 +41,7 @@ A6jOLyVp4zhceVLp7ZOztY8qbe7/ylqQVRmrJKatCz+6VjGWMAXFGH+2y0FHKXEd
 zmD24uz8gSKXDk0=
 -----END PRIVATE KEY-----';
 
+
     //code 解密用秘钥
     private $md5_key = 'jie';
 
@@ -49,8 +53,8 @@ zmD24uz8gSKXDk0=
     {
         ini_set('error_reporting', -1); //关闭错误提示
         ini_set('display_errors', -1);  //关闭错误提示
-        $this->private_key =  openssl_pkey_get_private($this->private_key);//格式化秘钥
         $this->public_key = openssl_pkey_get_public($this->public_key);//格式化秘钥
+        $this->private_key =  openssl_pkey_get_private($this->private_key);//格式化秘钥
     }
 
     /**
@@ -66,40 +70,6 @@ zmD24uz8gSKXDk0=
     function __set($property_name, $value) {
         $this->$property_name = $value;
     }
-
-    /**
-     * 请求远程数据
-     * @param type $url
-     * @param type $parm
-     * @return type
-     */
-    function get_curl_data($url, $param = array())
-    {
-        // 创建一个cURL资源
-        $ch = curl_init();
-
-        // 设置URL和相应的选项
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_HEADER, 0);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);//绕过ssl验证
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 1);
-
-        if (!empty($param)) {
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($param));
-        }
-        // 抓取URL并把它传递给浏览器
-        $res = curl_exec($ch);
-        // 关闭cURL资源，并且释放系统资源
-//    var_dump($res,$ch,$url,curl_error($ch));
-        curl_close($ch);
-        return $res;
-    }
-
-
 
     /**
      * 加密方法  （可自定义 如果自定义那么公钥私钥也需自行修改）
@@ -123,38 +93,50 @@ zmD24uz8gSKXDk0=
         return json_decode($decrypted, true);
     }
 
-    /**
-     * get_cookie 获取cookie并解密  （可自定义）
-     */
-    function get_cookie($key=''){
-        if(empty($key)){
-            $list = array();
-            foreach($_COOKIE as $k=>$v){
-                if(empty($v)){
-                    continue;
-                }
-                $list[$k]= $this->decrypted($v);
-            }
-            return $list;
-        }else{
-            if(empty($_COOKIE[$key])){
-                return array();
-            }else{
-                return $this->decrypted($_COOKIE[$key]);
-            }
-        }
-    }
 
     /**
      * $array
-     * set_cookie 设置cookie并解密  （可自定义）
+     * for_encryption 循环加密返回数组 （可自定义）
      */
-    function set_cookie($info){
+    function for_encryption($info){
+        $arr = array();
         foreach($info as $key=>$val){
-            $val = $this->encryption($val);
-            setcookie($key,$val,0,'/');
+            $arr[$key] = $val = $this->encryption($val);
         }
+        return $arr;
     }
+
+
+    /**
+     * 生成code并将用户信息存到缓存数据库  （可自定义）
+     */
+    function code($url='',$info){
+        $json = json_encode($info);
+
+        $code = md5($json.$url);
+        $key = md5($code.$this->md5_key);
+        //实例化redis
+        $redis = new Redis();
+        //连接
+        $redis->connect('127.0.0.1', 6379);
+        $redis->setex($key,100,$json);//key=value，有效期为10秒
+        return $code;
+    }
+
+    /**
+     * 根据code查找缓存数据库 并返回信息  （可自定义）
+     */
+    function get_info($key){
+
+        //实例化redis
+        $redis = new Redis();
+        //连接
+        $redis->connect('127.0.0.1', 6379);
+        $info = $redis->get($key);
+        $redis->del($key);
+        return $info;
+    }
+
 
 
     /**
@@ -170,37 +152,40 @@ zmD24uz8gSKXDk0=
     }
 
     /**
-     * 获取登录请求并请求获取用户信息  （可自定义）
+     * 登陆通知  （可自定义）
      */
-    function login($code,$params,$sign1){
-        $sign = $this->sign($params);
-        if($sign1 != $sign){
-            return 1;
-        }
-        $key = md5($code.$this->md5_key);
-        $url = $this->sso_code_url.$key;
-        $info = $this->get_curl_data($url);
+    function login($info){
 
-        if(empty($info)){
-            return 2;
+        //通知全部网站接口登出
+        foreach ($this->api_url as $url){
+            $code = $this->code($url,$info);
+            $time = time();
+            $params = array('time'=>$time,'type'=>'login','code'=>$code);
+            $sign = $this->sign($params);
+            $params['sign'] = $sign;
+            $url = $url.'?'.http_build_query($params);
+            echo '<script src="'.$url.'" type="text/javascript"></script>';
         }
-        $user = $this->get_user($info);
-        if(empty($user)){
-            return 3;
-        }
-        return $user;
+        //跳转到发起退出登录的网站
+        echo '<script type="text/javascript">window.onload=function(){window.location.href = "'.$_GET['callback'].'";}</script>';
     }
 
-    /**
-     * 退出校验  （可自定义）
-     */
-    function logout($code,$params){
 
-        $sign = $this->sign($params);
-        if($code == $sign){
-            return true;
+    /**
+     * 退出通知  （可自定义）
+     */
+    function logout(){
+        //通知全部网站接口登出
+        foreach ($this->api_url as $url){
+            $time = time();
+            $params = array('time'=>$time,'type'=>'logout');
+            $sign = $this->sign($params);
+            $params['sign'] = $sign;
+            $js_url = $url.'?'.http_build_query($params);
+            echo '<script src="'.$js_url.'" type="text/javascript"></script>';
         }
-        return false;
+        //跳转到发起退出登录的网站
+        echo '<script type="text/javascript">window.onload=function(){window.location.href = document.referrer;}</script>';
     }
 
     /**

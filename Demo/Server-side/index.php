@@ -1,8 +1,8 @@
 <?php
 header('Content-Type:text/html; charset=utf-8');
 
-require_once 'core.php';
-$core = new Core();
+require_once 'Server_core.php';
+$core = new Server_core();
 
 //退出登录操作
 if(isset($_GET['logout'])){
@@ -16,8 +16,11 @@ else if(isset($_POST['username']) && isset($_POST['password']) && isset($_GET['c
     //自定义校验
     if(true){
         //保存用户信息到cookie
-        $core->set_cookie(array('sign'=>$_POST['username']));
-        $info = $core->for_encryption(array('sign'=>$_POST['username']));
+        $info = array('sign'=>$_POST['username']);
+        foreach($info as $key=>$val){
+            setcookie($key,$val,0,'/');
+        }
+        $info = $core->for_encryption($info);
         $core->login($info);
     }
 }
