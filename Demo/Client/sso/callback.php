@@ -17,7 +17,7 @@ if(empty($_GET)){
                     foreach($user as $key=>$val){
                         setcookie($key,$val,0,'/');
                     }
-                    exit($_GET['callback'] .' (0)');
+                    exit($_GET['callback'] .' ("登录成功")');
                 }
             }else{
                 exit($_GET['callback'] .' ("非法请求")');
@@ -29,6 +29,7 @@ if(empty($_GET)){
                 $res = $core->logout($_GET['sign'],$params);
                 if($res){
                     setcookie('sign','',0,'/');
+                    exit($_GET['callback'] .' ("退出成功")');
                 }else{
                     echo $_GET['callback'] .' ("校验失败")';
                 }
