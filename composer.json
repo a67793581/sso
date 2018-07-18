@@ -9,6 +9,11 @@
             "email": "284474102@qq.com"
         }
     ],
+    "keywords": [
+        "sso",
+        "php",
+        "单点登录"
+    ],
     "minimum-stability": "stable",
     "require": {
         "php": ">=5.3"
