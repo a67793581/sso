@@ -12,15 +12,15 @@ if(empty($_GET)){
                 $params = array('time'=>$_GET['time'],'type'=>'login','code'=>$_GET['code']);
                 $user = $core->login($_GET['code'],$params,$_GET['sign']);
                 if(is_int($user)){
-                    exit($_GET['callback'] ." ($user){}");
+                    exit($_GET['callback'] ." ($user)");
                 }else{
                     foreach($user as $key=>$val){
                         setcookie($key,$val,0,'/');
                     }
-                    exit($_GET['callback'] .' (0){}');
+                    exit($_GET['callback'] .' (0)');
                 }
             }else{
-                exit($_GET['callback'] .' ("非法请求"){}');
+                exit($_GET['callback'] .' ("非法请求")');
             }
             break;
         case 'logout':
@@ -30,10 +30,10 @@ if(empty($_GET)){
                 if($res){
                     setcookie('sign','',0,'/');
                 }else{
-                    echo $_GET['callback'] .' ("校验失败"){}';
+                    echo $_GET['callback'] .' ("校验失败")';
                 }
             }else{
-                echo $_GET['callback'] .' ("非法请求"){}';
+                echo $_GET['callback'] .' ("非法请求")';
             }
             break;
     }
