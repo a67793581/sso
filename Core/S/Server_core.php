@@ -5,7 +5,7 @@
  * Date: 2018/7/4
  * Time: 19:20
  */
-
+namespace S\Server_core;
 class Server_core
 {
 

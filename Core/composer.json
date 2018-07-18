@@ -10,5 +10,13 @@
         }
     ],
     "minimum-stability": "beta",
-    "require": {}
+    "require": {
+        "php": ">=5.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "C\\Client_core\\": "Core/C/Client_core",
+            "S\\Server_core\\": "Core/S/Server_core"
+        }
+    }
 }
