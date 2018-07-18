@@ -1,5 +1,5 @@
 {
-    "name": "a67793581/php_sso",
+    "name": "a67793581/sso",
     "description": "This is a single sign on class written in PHP",
     "type": "library",
     "license": "MIT",
@@ -15,7 +15,7 @@
     },
     "autoload": {
         "psr-4": {
-            "php_sso\\": "src/"
+            "sso\\": "src/"
         }
     }
 }
