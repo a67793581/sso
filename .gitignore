@@ -57,3 +57,7 @@ ErrorFiles
 # 缓存文件夹
 update/
 application/logs/
+
+# 作曲家文件
+vendor/
+composer.lock
