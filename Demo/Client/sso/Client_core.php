@@ -85,7 +85,7 @@ zmD24uz8gSKXDk0=
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);//绕过ssl验证
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 1);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 10);
 
         if (!empty($param)) {
             curl_setopt($ch, CURLOPT_POST, 1);
