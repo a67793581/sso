@@ -189,7 +189,7 @@ zmD24uz8gSKXDk0=
      */
     function logout(){
         echo '<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script><script type="text/javascript">$(document).ready(function(){';
-        $this->ajax($this->api_url,'login',$_GET['callback'],'');
+        $this->ajax($this->api_url,'login',$_SERVER['HTTP_REFERER'],'');
         echo '    });</script>';
     }
 
