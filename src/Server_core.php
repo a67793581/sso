@@ -5,7 +5,7 @@
  * Date: 2018/7/4
  * Time: 19:20
  */
-namespace sso\Server_core;
+namespace sso;
 class Server_core
 {
 
