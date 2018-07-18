@@ -123,7 +123,22 @@ zmD24uz8gSKXDk0=
         return json_decode($decrypted, true);
     }
 
-
+    /**
+     * 加密sign
+     * @param $params
+     * @return string
+     */
+    function sign($params)
+    {
+        ksort($params);
+        $sign = '';
+        foreach ($params as $key => $val) {
+            $sign .= $key . $val;
+        }
+        $sign .= 'keysecret' . $this->md5_key;
+        $sign = md5($sign);
+        return $sign;
+    }
 
     /**
      * 将获取到的用户信息解密  （可自定义）
@@ -171,20 +186,4 @@ zmD24uz8gSKXDk0=
         return false;
     }
 
-    /**
-     * 加密sign
-     * @param $params
-     * @return string
-     */
-    function sign($params)
-    {
-        ksort($params);
-        $sign = '';
-        foreach ($params as $key => $val) {
-            $sign .= $key . $val;
-        }
-        $sign .= 'keysecret' . $this->md5_key;
-        $sign = md5($sign);
-        return $sign;
-    }
 }

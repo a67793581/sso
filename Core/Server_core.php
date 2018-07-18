@@ -6,7 +6,7 @@
  * Time: 19:20
  */
 
-class Core
+class Server_core
 {
 
     //$api_url 为各个网站接口的地址
@@ -23,6 +23,7 @@ class Core
 
     //code 加密用秘钥
     private $md5_key = '';
+
 
 
     /**
@@ -72,42 +73,6 @@ class Core
         return json_decode($decrypted, true);
     }
 
-    /**
-     * get_cookie 获取cookie并解密  （可自定义）
-     */
-    function get_cookie($key=''){
-        if(empty($key)){
-            $list = array();
-            foreach($_COOKIE as $k=>$v){
-                if(empty($v)){
-                    continue;
-                }
-                $list[$k]= $this->decrypted($v);
-            }
-            return $list;
-        }else{
-            if(empty($_COOKIE[$key])){
-                return array();
-            }else{
-                return $this->decrypted($_COOKIE[$key]);
-            }
-        }
-    }
-
-    /**
-     * $array
-     * set_cookie 设置cookie并解密  （可自定义）
-     */
-    function set_cookie($info){
-        if(empty($info)){
-            return false;
-        }
-        foreach($info as $key=>$val){
-            setcookie($key,$val,0,'/');
-        }
-        return true;
-    }
-
 
     /**
      * $array
@@ -119,6 +84,23 @@ class Core
             $arr[$key] = $val = $this->encryption($val);
         }
         return $arr;
+    }
+
+    /**
+     * 加密sign
+     * @param $params
+     * @return string
+     */
+    function sign($params)
+    {
+        ksort($params);
+        $sign = '';
+        foreach ($params as $key => $val) {
+            $sign .= $key . $val;
+        }
+        $sign .= 'keysecret' . $this->md5_key;
+        $sign = md5($sign);
+        return $sign;
     }
 
     /**
@@ -151,19 +133,6 @@ class Core
         return $info;
     }
 
-
-    /**
-     * 将获取到的用户信息解密  （可自定义）
-     */
-    function get_user($info){
-        $info = json_decode($info);
-        $res = array();
-        foreach ($info as $k => $v){
-            $res[$k] = $this->decrypted($v);
-        }
-        return $res;
-    }
-
     /**
      * 登陆通知  （可自定义）
      */
@@ -183,11 +152,7 @@ class Core
         echo '<script type="text/javascript">window.onload=function(){window.location.href = "'.$_GET['callback'].'";}</script>';
     }
 
-
-    /**
-     * 退出通知  （可自定义）
-     */
-    function logout(){
+    function  logout(){
         //通知全部网站接口登出
         foreach ($this->api_url as $url){
             $time = time();
@@ -201,20 +166,67 @@ class Core
         echo '<script type="text/javascript">window.onload=function(){window.location.href = document.referrer;}</script>';
     }
 
-    /**
-     * 加密sign
-     * @param $params
-     * @return string
-     */
-    function sign($params)
-    {
-        ksort($params);
-        $sign = '';
-        foreach ($params as $key => $val) {
-            $sign .= $key . $val;
-        }
-        $sign .= 'keysecret' . $this->md5_key;
-        $sign = md5($sign);
-        return $sign;
-    }
+//    /**
+//     * 退出通知  （可自定义）
+//     */
+//    function logout(){
+//        echo '<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script><script type="text/javascript">$(document).ready(function(){';
+//        $this->ajax($this->api_url,'logout',$_SERVER['HTTP_REFERER'],'');
+//        echo '    });</script>';
+//    }
+//
+//    /**
+//     * 登陆通知  （可自定义）
+//     */
+//    function login($info){
+//
+//        echo '<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script><script type="text/javascript">$(document).ready(function(){';
+//        $this->ajax($this->api_url,'login',$_GET['callback'],$info);
+//        echo '    });</script>';
+//    }
+//
+//    /**
+//     * 递归发起ajax  （可自定义）
+//     */
+//    function ajax($arr,$type='',$callback,$info=''){
+//        if(empty($arr)) {
+//            return;
+//        }
+//
+//        $params = array();
+//        $params['time'] = time();
+//        $params['type'] = $type;
+//
+//        if(!empty($info)){
+//            $params['code'] = $this->code($arr[0],$info);
+//        }
+//        $params['sign'] = $this->sign($params);
+//        $url = $arr[0].'?'.http_build_query($params);
+//
+//        array_shift($arr);
+//
+//        echo '
+//            $.ajax({
+//                url: "'.$url.'", //url
+//                type: "get", //方法
+//                dataType: "jsonp", //数据格式为 jsonp 支持跨域提交
+//                jsonpCallback : "callback",
+//                async:false,
+//                success: function(data){ //读取返回结果
+//                    ';
+//
+//        if(!empty($arr)){
+//            $this->ajax($arr,$type,$callback,$info);
+//        }else{
+//            echo 'window.setTimeout("window.location=\''.$callback.'\'",0);';
+//        }
+//        echo '
+//                }
+//            });
+//        ';
+//        return;
+//    }
+//
+
+
 }

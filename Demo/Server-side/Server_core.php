@@ -106,6 +106,22 @@ zmD24uz8gSKXDk0=
         return $arr;
     }
 
+    /**
+     * 加密sign
+     * @param $params
+     * @return string
+     */
+    function sign($params)
+    {
+        ksort($params);
+        $sign = '';
+        foreach ($params as $key => $val) {
+            $sign .= $key . $val;
+        }
+        $sign .= 'keysecret' . $this->md5_key;
+        $sign = md5($sign);
+        return $sign;
+    }
 
     /**
      * 生成code并将用户信息存到缓存数据库  （可自定义）
@@ -135,20 +151,6 @@ zmD24uz8gSKXDk0=
         $info = $redis->get($key);
         $redis->del($key);
         return $info;
-    }
-
-
-
-    /**
-     * 将获取到的用户信息解密  （可自定义）
-     */
-    function get_user($info){
-        $info = json_decode($info);
-        $res = array();
-        foreach ($info as $k => $v){
-            $res[$k] = $this->decrypted($v);
-        }
-        return $res;
     }
 
     /**
@@ -246,20 +248,5 @@ zmD24uz8gSKXDk0=
 //    }
 //
 
-    /**
-     * 加密sign
-     * @param $params
-     * @return string
-     */
-    function sign($params)
-    {
-        ksort($params);
-        $sign = '';
-        foreach ($params as $key => $val) {
-            $sign .= $key . $val;
-        }
-        $sign .= 'keysecret' . $this->md5_key;
-        $sign = md5($sign);
-        return $sign;
-    }
+
 }

@@ -6,7 +6,7 @@
  * Time: 19:20
  */
 
-class Core
+class Client_core
 {
 
     //设置服务端code获取用户信息的完整url包含变量名不包含变量值
@@ -20,7 +20,6 @@ class Core
 
     //code 加密用秘钥
     private $md5_key = '';
-
 
     /**
      * 初始化
@@ -65,7 +64,7 @@ class Core
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);//绕过ssl验证
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 1);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 10);
 
         if (!empty($param)) {
             curl_setopt($ch, CURLOPT_POST, 1);
@@ -104,38 +103,21 @@ class Core
     }
 
     /**
-     * get_cookie 获取cookie并解密  （可自定义）
+     * 加密sign
+     * @param $params
+     * @return string
      */
-    function get_cookie($key=''){
-        if(empty($key)){
-            $list = array();
-            foreach($_COOKIE as $k=>$v){
-                if(empty($v)){
-                    continue;
-                }
-                $list[$k]= $this->decrypted($v);
-            }
-            return $list;
-        }else{
-            if(empty($_COOKIE[$key])){
-                return array();
-            }else{
-                return $this->decrypted($_COOKIE[$key]);
-            }
+    function sign($params)
+    {
+        ksort($params);
+        $sign = '';
+        foreach ($params as $key => $val) {
+            $sign .= $key . $val;
         }
+        $sign .= 'keysecret' . $this->md5_key;
+        $sign = md5($sign);
+        return $sign;
     }
-
-    /**
-     * $array
-     * set_cookie 设置cookie并解密  （可自定义）
-     */
-    function set_cookie($info){
-        foreach($info as $key=>$val){
-            $val = $this->encryption($val);
-            setcookie($key,$val,0,'/');
-        }
-    }
-
 
     /**
      * 将获取到的用户信息解密  （可自定义）
@@ -183,20 +165,4 @@ class Core
         return false;
     }
 
-    /**
-     * 加密sign
-     * @param $params
-     * @return string
-     */
-    function sign($params)
-    {
-        ksort($params);
-        $sign = '';
-        foreach ($params as $key => $val) {
-            $sign .= $key . $val;
-        }
-        $sign .= 'keysecret' . $this->md5_key;
-        $sign = md5($sign);
-        return $sign;
-    }
 }
