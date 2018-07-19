@@ -9,7 +9,14 @@ namespace sso;
 require_once 'Core.php';
 class Server_core extends  Core
 {
+    //$api_url 为各个网站接口的地址
+    private $api_url = array();
 
+    function __construct(array $api_url,string $public_key, string $private_key, string $md5_key)
+    {
+        parent::__construct($public_key, $private_key, $md5_key);
+        $this->api_url = $api_url;
+    }
 
     /**
      * $array

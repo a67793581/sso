@@ -9,6 +9,14 @@ namespace sso;
 require_once 'Core.php';
 class Client_core extends  Core
 {
+    //设置sso的code验证地址
+    private $sso_code_url = '';
+
+    function __construct(string $sso_code_url,string $public_key, string $private_key, string $md5_key)
+    {
+        parent::__construct($public_key, $private_key, $md5_key);
+        $this->sso_code_url = $sso_code_url;
+    }
 
     /**
      * 请求远程数据
