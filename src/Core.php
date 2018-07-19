@@ -13,9 +13,7 @@ class Core
 {
 
     //$api_url 为各个网站接口的地址
-    private $api_url = array(
-        'http://test2.aiku.fun/sso/callback.php',
-    );
+    private $api_url = array();
     //以下3个参数 2个核心类要一致
     //加密用RSA公钥 秘钥格式PKCS#1
     private $public_key = '';
