@@ -17,11 +17,18 @@
 *.RTF	 diff=astextplain
 
 # composer忽略无关文件
-/.github            export-ignore
-/.gitignore         export-ignore
-/.scrutinizer.yml   export-ignore
-/.travis.yml        export-ignore
+/.github export-ignore
+/.travis.yml export-ignore
+/.gitattributes export-ignore
+/.gitignore export-ignore
+/.scrutinizer.yml export-ignore
+/.travis.yml export-ignore
 
-/Demo               export-ignore
-/认证中心.png        export-ignore
-/认证中心.xmind      export-ignore
+/ phpunit.xml export-ignore
+/ changelog.md export-ignore
+/ readme.md export-ignore
+
+/ tests export-ignore
+/ stubs export-ignore
+/ Demo export-ignore
+/ 认证中心.* export-ignore
