@@ -33,7 +33,6 @@ class Core
         // 初始化
         $this->public_key = openssl_pkey_get_public($public_key);
         $this->private_key = openssl_pkey_get_private($private_key);
-        $this->private_key = $private_key;
         $this->md5_key = $md5_key;
     }
 
