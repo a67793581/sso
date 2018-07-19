@@ -6,72 +6,9 @@
  * Time: 19:20
  */
 namespace sso;
-class Server_core
+require_once 'Core.php';
+class Server_core extends  Core
 {
-
-    //$api_url 为各个网站接口的地址
-    private $api_url = array(
-        'http://test2.aiku.fun/sso/callback.php',
-    );
-    //以下3个参数 2个核心类要一致
-    //加密用RSA公钥 秘钥格式PKCS#1
-    private $public_key = '';
-
-    //加密用RSA私钥 秘钥格式PKCS#1
-    private  $private_key = '';
-
-
-    //code 加密用秘钥
-    private $md5_key = '';
-
-
-
-    /**
-     * 初始化
-     */
-    public function __construct()
-    {
-        ini_set('error_reporting', -1); //关闭错误提示
-        ini_set('display_errors', -1);  //关闭错误提示
-        $this->public_key = openssl_pkey_get_public($this->public_key);//格式化秘钥
-        $this->private_key =  openssl_pkey_get_private($this->private_key);//格式化秘钥
-    }
-
-    /**
-     * 获取对象属性
-     */
-    function __get($property_name) {
-        return isset($this->$property_name) ? $this->$property_name : null;
-    }
-
-    /**
-     * 设置对象属性
-     */
-    function __set($property_name, $value) {
-        $this->$property_name = $value;
-    }
-
-    /**
-     * 加密方法  （可自定义 如果自定义那么公钥私钥也需自行修改）
-     */
-    function encryption($data){
-
-        $data = json_encode($data);
-        $encrypted = '';
-        openssl_public_encrypt($data, $encrypted, $this->public_key);//公钥加密
-        $encrypted = base64_encode($encrypted);// base64传输
-        return $encrypted;
-    }
-
-    /**
-     * 解密方法  （可自定义 如果自定义那么公钥私钥也需自行修改）
-     */
-    function decrypted($data){
-
-        $decrypted = '';
-        openssl_private_decrypt(base64_decode($data), $decrypted, $this->private_key);//私钥解密
-        return json_decode($decrypted, true);
-    }
 
 
     /**
@@ -84,23 +21,6 @@ class Server_core
             $arr[$key] = $val = $this->encryption($val);
         }
         return $arr;
-    }
-
-    /**
-     * 加密sign
-     * @param $params
-     * @return string
-     */
-    function sign($params)
-    {
-        ksort($params);
-        $sign = '';
-        foreach ($params as $key => $val) {
-            $sign .= $key . $val;
-        }
-        $sign .= 'keysecret' . $this->md5_key;
-        $sign = md5($sign);
-        return $sign;
     }
 
     /**
