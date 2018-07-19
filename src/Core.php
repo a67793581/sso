@@ -31,9 +31,20 @@ class Core
     public function __construct( string $public_key,string $private_key,string $md5_key)
     {
         // 初始化
+        // 判断openssl扩展存在
+        extension_loaded('openssl') or die('openssl 扩展未开启');
+
         $this->public_key = openssl_pkey_get_public($public_key);
         $this->private_key = openssl_pkey_get_private($private_key);
         $this->md5_key = $md5_key;
+
+        if($this->public_key === false) {die('公钥错误');}
+        if($this->private_key === false) {die('秘钥错误');}
+
+        $bool = $this->decrypted($this->encryption('b'));
+        if(empty($bool)){
+            die('秘钥和公钥不匹配');
+        }
     }
 
     /**
