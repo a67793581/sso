@@ -55,7 +55,7 @@ zmD24uz8gSKXDk0=
 
 //code 解密用秘钥
 $md5_key = 'jie';
-$core = new Server_core($api_url,$public_key,$private_key,$md5_key);
+$core = new Server_core($public_key,$private_key,$md5_key,$api_url);
 
 
 //退出登录操作
