@@ -4,7 +4,7 @@ ini_set('display_errors', '1');
 error_reporting(E_ALL);
 require_once './vendor/autoload.php';
 
-use sso\Client_core;
+use sso\Server_core;
 //客户端接口地址
 $api_url = array(
     'http://test2.aiku.fun/callback.php',
