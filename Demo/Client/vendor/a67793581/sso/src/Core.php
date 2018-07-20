@@ -28,7 +28,7 @@ class Core
     /**
      * 初始化
      */
-    public function __construct( string $public_key,string $private_key,string $md5_key)
+    public function __construct(  $public_key, $private_key, $md5_key)
     {
         // 初始化
         // 判断openssl扩展存在
