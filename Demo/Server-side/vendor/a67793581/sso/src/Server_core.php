@@ -39,7 +39,7 @@ class Server_core extends  Core
         $code = md5($json.$url);
         $key = md5($code.$this->md5_key);
         //实例化redis
-        $redis = new Redis();
+        $redis = new \Redis();
         //连接
         $redis->connect('127.0.0.1', 6379);
         $redis->setex($key,100,$json);//key=value，有效期为10秒
@@ -52,7 +52,7 @@ class Server_core extends  Core
     function get_info($key){
 
         //实例化redis
-        $redis = new Redis();
+        $redis = new \Redis();
         //连接
         $redis->connect('127.0.0.1', 6379);
         $info = $redis->get($key);
