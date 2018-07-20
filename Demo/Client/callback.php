@@ -40,7 +40,7 @@ zmD24uz8gSKXDk0=
 
 //code 解密用秘钥
     $md5_key = 'jie';
-    $core = new Client_core($public_key,$private_key,$md5_key,$sso_code_url);
+    $core = new Client_core($sso_code_url,$public_key,$private_key,$md5_key);
     $callback = empty($_GET['callback']) ? 'function' : $_GET['callback'];
     $callback2 = empty($_GET['callback']) ? '{}' : '';
     switch ($_GET['type']){
