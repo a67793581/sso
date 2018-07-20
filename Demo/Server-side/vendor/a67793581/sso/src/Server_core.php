@@ -76,7 +76,7 @@ class Server_core extends  Core
             echo '<script src="'.$url.'" type="text/javascript"></script>';
         }
         //跳转到发起退出登录的网站
-        echo '<script type="text/javascript">window.onload=function(){window.location.href = "'.$_GET['callback'].'";}</script>';
+//        echo '<script type="text/javascript">window.onload=function(){window.location.href = "'.$_GET['callback'].'";}</script>';
     }
 
     function  logout(){
