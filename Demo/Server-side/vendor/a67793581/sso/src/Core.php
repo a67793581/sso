@@ -33,6 +33,7 @@ class Core
         // 初始化
         // 判断openssl扩展存在
         extension_loaded('openssl') or die('openssl 扩展未开启');
+        extension_loaded('redis') or die('Redis 扩展未开启');
 
         $this->public_key = openssl_pkey_get_public($public_key);
         $this->private_key = openssl_pkey_get_private($private_key);
