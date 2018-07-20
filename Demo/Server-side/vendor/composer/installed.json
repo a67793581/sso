@@ -1,0 +1,48 @@
+[
+    {
+        "name": "a67793581/sso",
+        "version": "v2",
+        "version_normalized": "2.0.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/a67793581/sso.git",
+            "reference": "ee6d26235523764c2da92c98fa9304815fd66d75"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/a67793581/sso/zipball/ee6d26235523764c2da92c98fa9304815fd66d75",
+            "reference": "ee6d26235523764c2da92c98fa9304815fd66d75",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.7"
+        },
+        "require-dev": {
+            "php": ">=5.3.7"
+        },
+        "time": "2018-07-20T08:33:45+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "sso\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "kaluo",
+                "email": "284474102@qq.com"
+            }
+        ],
+        "description": "This is a single sign on class written in PHP",
+        "keywords": [
+            "SSO",
+            "php",
+            "单点登录"
+        ]
+    }
+]
