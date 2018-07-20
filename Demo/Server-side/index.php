@@ -6,9 +6,7 @@ require_once './vendor/autoload.php';
 
 use sso\Server_core;
 //客户端接口地址
-$api_url = array(
-    'http://test2.aiku.fun/callback.php',
-);
+$api_url = array('http://test2.aiku.fun/callback.php',);
 //加密用公钥
 $public_key = '-----BEGIN PUBLIC KEY-----
 MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC46V0gBZv78t4MFGlRE5kWeN3j
